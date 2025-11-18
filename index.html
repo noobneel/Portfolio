@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Neelohit Roy — Game Designer & Producer</title>
+    <link rel="icon" type="image/x-icon" href="assets/weblogo.png">
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200..1000&family=Permanent+Marker&family=Reenie+Beanie&display=swap" rel="stylesheet">
+    <style>
+      /* Base colors to emulate your theme */
+      :root{
+        --bg: #0f0f0f;
+        --foreground: #f8f8f8;
+        --muted: rgba(255,255,255,0.6);
+        --secondary-bg: rgba(255,255,255,0.02);
+      }
+      html,body{
+        height:100%;
+      }
+      body {
+        margin: 0;
+        font-family: 'Nunito', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        background: var(--bg);
+        color: var(--foreground);
+        -webkit-font-smoothing:antialiased;
+        -moz-osx-font-smoothing:grayscale;
+        scroll-behavior: smooth;
+      }
+
+      /* Marquee Animations */
+      .marquee-container {
+        animation: marquee 40s linear infinite;
+      }
+      .marquee-container-reverse {
+        animation: marquee-reverse 40s linear infinite;
+      }
+      @keyframes marquee {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+      }
+      @keyframes marquee-reverse {
+        0% { transform: translateX(-50%); }
+        100% { transform: translateX(0); }
+      }
+
+      /* Hero-specific animations (fade + delays) */
+      .animate-fade-in {
+        animation: fadeIn 800ms ease forwards;
+        opacity: 0;
+      }
+      .animate-fade-in-delay-1 {
+        animation: fadeIn 900ms ease 200ms forwards;
+        opacity: 0;
+      }
+      .animate-fade-in-delay-2 {
+        animation: fadeIn 900ms ease 400ms forwards;
+        opacity: 0;
+      }
+      .animate-fade-in-delay-3 {
+        animation: fadeIn 900ms ease 600ms forwards;
+        opacity: 0;
+      }
+
+      @keyframes fadeIn {
+        from { transform: translateY(6px); opacity: 0; }
+        to   { transform: translateY(0); opacity: 1; }
+      }
+
+      /* slower bounce */
+      .animate-bounce-slow {
+        animation: bounceSlow 1.8s infinite;
+      }
+      @keyframes bounceSlow {
+        0%,100% { transform: translateY(0); }
+        50% { transform: translateY(6px); }
+      }
+
+      /* small helper to limit huge marquee text overflow on small screens */
+      .marquee-container h2,
+      .marquee-container-reverse h2,
+      .marquee-container h1,
+      .marquee-container-reverse h1 {
+        white-space: nowrap;
+        pointer-events: none;
+      }
+
+      /* subtle decorative blur shapes (can be customized further) */
+      .hero-blob {
+        filter: blur(32px);
+        opacity: .35;
+        pointer-events: none;
+      }
+
+      /* Accent boxed "Hi! i'm" look */
+      .label-perm {
+        font-family: 'Permanent Marker', cursive;
+        font-size: 20px;
+      }
+
+      /* small responsive clamp fallback for older browsers */
+      .hero-name {
+        font-weight: 700;
+        line-height: 1.2;
+      }
+
+      /* ensure large marquee text doesn't push layout */
+      .marquee-wrapper {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+    </style>
+  </head>
+
+  <body class="min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-black/50 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-6 lg:px-12 py-4 flex items-center justify-between">
+        <div
+          class="flex-shrink-0 cursor-pointer tracking-wider font-semibold"
+          onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+        >
+          <img src="assets/logo.png" alt="NEELOHIT ROY" class="h-12 w-auto object-contain" />
+        </div>
+
+        <div class="hidden md:flex items-center gap-8">
+          <button onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})" class="text-xs tracking-[0.2em] uppercase hover:opacity-60 transition-opacity">ABOUT</button>
+          <button onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})" class="text-xs tracking-[0.2em] uppercase hover:opacity-60 transition-opacity">PROJECTS</button>
+          <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})" class="text-xs tracking-[0.2em] uppercase hover:opacity-60 transition-opacity">CONTACT</button>
+          <button onclick="window.open('assets/Neelohit Roy-Game Producer-Resume.pdf','_blank')" class="text-xs tracking-[0.2em] uppercase px-6 py-2 border border-white/20 hover:bg-white hover:text-black transition-all hover:-rotate-2">RESUME</button>
+        </div>
+        <!-- Mobile Button -->
+        <button id="hamburger" class="md:hidden relative w-8 h-8 flex flex-col justify-center items-center group">
+          <span class="block w-6 h-[2px] bg-white transition-all duration-300 origin-center group-[.open]:rotate-45 group-[.open]:translate-y-[7px]"></span>
+          <span class="block w-6 h-[2px] bg-white mt-1 transition-all duration-300 opacity-100 group-[.open]:opacity-0"></span>
+          <span class="block w-6 h-[2px] bg-white mt-1 transition-all duration-300 origin-center group-[.open]:-rotate-45 group-[.open]:-translate-y-[7px]"></span>
+        </button>
+      </div>
+      <div id="mobile-menu" class="md:hidden max-h-0 overflow-hidden transition-[max-height] duration-300 ease-in-out">
+        <div class="bg-black/50 backdrop-blur-md text-white flex flex-col items-center gap-6 
+              w-full pt-4 pb-6"> 
+          <button onclick="scrollAndClose('about')" class="text-sm tracking-[0.2em] uppercase">ABOUT</button>
+          <button onclick="scrollAndClose('projects')" class="text-sm tracking-[0.2em] uppercase">PROJECTS</button>
+          <button onclick="scrollAndClose('contact')" class="text-sm tracking-[0.2em] uppercase">CONTACT</button>
+          <button onclick="window.open('assets/Neelohit Roy-Game Producer-Resume.pdf','_blank')" class="text-sm tracking-[0.2em] uppercase px-6 py-3 border border-white/20 hover:bg-white hover:text-black transition-all hover:-rotate-3">RESUME</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Floating Contact Buttons (sticky right) -->
+    <div class="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col gap-4">
+      <a href="mailto:neelohit_roy0987@yahoo.com"
+          class="group w-12 h-12 relative border border-white/20 bg-[rgba(255,255,255,0.02)] 
+                  flex items-center justify-center hover:border-white hover:bg-white 
+                  hover:text-black transition-all hover:scale-110 rounded">
+        <!-- Default White Icon -->
+        <img src="assets/mail-128-w.png"
+            class="absolute h-6 w-auto object-contain transition-opacity duration-200 opacity-100 group-hover:opacity-0" />
+        <!-- Black Icon on Hover -->
+        <img src="assets/mail-128-b.png"
+            class="absolute h-6 w-auto object-contain transition-opacity duration-200 opacity-0 group-hover:opacity-100" />
+      </a>
+      <a href="https://noobneel.itch.io/"
+        target="_blank"
+        class="group w-12 h-12 relative border border-white/20 bg-[rgba(255,255,255,0.02)] 
+        flex items-center justify-center hover:border-white hover:bg-white 
+          over:text-black transition-all hover:scale-110 rounded">
+        <img src="assets/itchio-textless-white.svg"
+          class="absolute h-6 w-auto object-contain transition-opacity duration-200 opacity-100 group-hover:opacity-0" />
+        <img src="assets/itchio-textless-black.svg"
+          class="absolute h-6 w-auto object-contain transition-opacity duration-200 opacity-0 group-hover:opacity-100" />
+      </a>
+      <a href="https://www.linkedin.com/in/neelohit-roy/"
+        target="_blank"
+        class="group w-12 h-12 relative border border-white/20 bg-[rgba(255,255,255,0.02)] 
+                flex items-center justify-center hover:border-white hover:bg-white 
+                hover:text-black transition-all hover:scale-110 rounded">
+        <img src="assets/InBug-White.png"
+            class="absolute h-6 w-auto object-contain transition-opacity duration-200 opacity-100 group-hover:opacity-0" />
+        <img src="assets/InBug-Black.png"
+            class="absolute h-6 w-auto object-contain transition-opacity duration-200 opacity-0 group-hover:opacity-100" />
+
+      </a>
+    </div>
+
+    <!-- MAIN -->
+    <main class="pt-20">
+
+      <section class="min-h-screen flex flex-col items-center justify-center relative px-6 lg:px-12 overflow-hidden">
+  <!-- Main Content -->
+  <div class="max-w-4xl mx-auto text-center relative z-10">
+    <!-- Hi! I'm label -->
+    <div class="inline-block mb-2 opacity-0 animate-fade-in">
+      <div class="px-6 py-0 inline-block rotate-5 border-0 border-foreground" style="transform: rotate(-7deg);">
+        <p class="text-[28px] tracking-wider text-white" 
+        style="font-family: 'Permanent Marker', sans-serif; font-size:28px;" >
+        Hi! I'm</p>
+      </div>
+    </div>
+
+    <!-- Name -->
+    <h1
+      class="mb-4 opacity-0 animate-fade-in-delay-1"
+      style="
+        font-family: Reenie Beanie, sans-serif;
+        font-size: clamp(5rem, 8vw, 10rem);
+        font-weight: 700;
+        line-height: 1.2;
+      "
+    >
+      Neelohit Roy
+    </h1>
+
+    <!-- Subtitle -->
+    <p class="text-xs tracking-[0.3em] uppercase mb-16 opacity-0 animate-fade-in-delay-2">
+      GAME DESIGNER | GAME PRODUCER
+    </p>
+
+    <!-- Scroll Down Indicator -->
+    <div
+      class="flex flex-col items-center gap-4 cursor-pointer opacity-0 animate-fade-in-delay-3"
+      onclick="document.getElementById('about').scrollIntoView({ behavior: 'smooth' })"
+    >
+      <p class="text-xs tracking-[0.2em] uppercase">Scroll Down</p>
+
+      <!-- Arrow -->
+      <div class="w-14 h-5 animate-bounce-slow">
+        <svg class="block w-full h-full" fill="none" preserveAspectRatio="none" viewBox="0 0 54 19">
+          <path
+            d="M2.00033 2.00033L27.0003 16.4341L52.0003 2.00033"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-width="4"
+          />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decorative Elements -->
+  <div class="absolute top-1/4 right-12 w-16 h-16 bg-blue-200 rounded-full blur-2xl opacity-40"></div>
+  <div class="absolute bottom-1/3 left-12 w-20 h-20 bg-yellow-100 rounded-full blur-2xl opacity-30"></div>
+</section>
+
+<!-- Tailwind animations -->
+<style>
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .animate-fade-in {
+    animation: fade-in 1s ease forwards;
+  }
+  .animate-fade-in-delay-1 {
+    animation: fade-in 1s ease forwards;
+    animation-delay: 0.3s;
+  }
+  .animate-fade-in-delay-2 {
+    animation: fade-in 1s ease forwards;
+    animation-delay: 0.6s;
+  }
+  .animate-fade-in-delay-3 {
+    animation: fade-in 1s ease forwards;
+    animation-delay: 0.9s;
+  }
+  @keyframes bounce-slow {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(6px);
+    }
+  }
+  .animate-bounce-slow {
+    animation: bounce-slow 2s infinite;
+  }
+</style>
+
+
+        <!-- Decorative Elements -->
+        <div class="absolute top-1/4 right-12 w-16 h-16 bg-blue-200 rounded-full hero-blob" style="opacity:.4"></div>
+        <div class="absolute bottom-1/3 left-12 w-20 h-20 bg-yellow-100 rounded-full hero-blob" style="opacity:.3"></div>
+      </section>
+
+      <!-- ABOUT -->
+      <section
+        id="about"
+        class="py-24 px-6 lg:px-12 relative overflow-hidden bg-[rgba(255,255,255,0.01)] flex items-center"
+      >
+        <div class="max-w-7xl mx-auto relative z-10 w-full">
+          <div
+            class="grid lg:grid-cols-2 gap-16 items-center justify-items-center text-center lg:text-left w-full"
+          >
+            <!-- Left Column -->
+            <div class="space-y-8 max-w-xl">
+              <div class="space-y-2">
+                <h3 class="text-4xl leading-relaxed">
+                  Hey! I'm Neelohit Roy,<br />
+                  Game Designer and Producer
+                </h3>
+              </div>
+
+              <div class="space-y-6 text-[rgba(255,255,255,0.85)] leading-relaxed">
+                <p>
+                  Obsessed with games for as long as I can remember. I grew up diving into video games and tabletop adventures, and even started creating my own board games back in high school – that's where my game design journey truly began.
+                </p>
+                <p>
+                  These days, I channel that same passion into the professional world, working as a Project Manager at a VR-based studio, where I help bring creative ideas to life in virtual worlds.
+                </p>
+              </div>
+
+              <div class="pt-4">
+                <a
+                  href="assets/Neelohit Roy-Game Producer-Resume.pdf"
+                  download
+                  class="inline-flex items-center gap-2 px-8 py-3 bg-white text-black rounded-full hover:opacity-90 transition-opacity hover:rotate-2 hover:scale-105"
+                >
+                  <span>Download Resume</span>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M8 2V12M8 12L12 8M8 12L4 8M2 14H14"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            <!-- Right Column - Image -->
+            <div class="relative flex justify-center lg:justify-start w-full">
+              <div class="relative aspect-[3/4] w-80 sm:w-96 lg:w-[420px] mx-auto lg:mx-0">
+                <div
+                  class="relative w-full h-full overflow-hidden rounded-3xl transition-transform duration-300 hover:rotate-2 hover:scale-105 cursor-pointer"
+                >
+                  <img
+                    src="assets/NeelPic.jpg"
+                    alt="Neelohit Roy portrait"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+                <div
+                  class="absolute -z-10 top-4 left-4 w-full h-full border-2 border-[rgba(255,255,255,0.08)] rounded-3xl"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Marquee Background Text -->
+        <div
+          class="absolute bottom-0 left-0 right-0 overflow-hidden pointer-events-none opacity-5"
+        >
+          <div class="marquee-container whitespace-nowrap">
+            <h2
+              class="inline-block uppercase"
+              style="font-family: 'Reenie Beanie', sans-serif; font-weight:900; font-size:256px; line-height:1;"
+            >
+              ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME •
+            </h2>
+          </div>
+        </div>
+      </section>
+
+
+
+      <!-- SKILLS -->
+      <section id="skills" class="py-16 px-6 lg:px-12">
+        <div class="max-w-7xl mx-auto">
+          <div class="grid md:grid-cols-2 gap-16">
+            <div class="space-y-8">
+              <h3 class="text-xl tracking-wider uppercase border-b border-[rgba(255,255,255,0.08)] pb-4">Technical Skills</h3>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="border border-[rgba(255,255,255,0.08)] px-4 py-3 text-center hover:border-white hover:bg-white hover:text-black transition-all duration-300 cursor-default hover:rotate-2 hover:scale-105"><p class="text-sm tracking-wider">Microsoft 365</p></div>
+                <div class="border border-[rgba(255,255,255,0.08)] px-4 py-3 text-center hover:border-white hover:bg-white hover:text-black transition-all duration-300 cursor-default hover:rotate-2 hover:scale-105"><p class="text-sm tracking-wider">Google Workspace</p></div>
+                <div class="border border-[rgba(255,255,255,0.08)] px-4 py-3 text-center hover:border-white hover:bg-white hover:text-black transition-all duration-300 cursor-default hover:rotate-2 hover:scale-105"><p class="text-sm tracking-wider">Unity</p></div>
+                <div class="border border-[rgba(255,255,255,0.08)] px-4 py-3 text-center hover:border-white hover:bg-white hover:text-black transition-all duration-300 cursor-default hover:rotate-2 hover:scale-105"><p class="text-sm tracking-wider">Blender</p></div>
+                <div class="border border-[rgba(255,255,255,0.08)] px-4 py-3 text-center hover:border-white hover:bg-white hover:text-black transition-all duration-300 cursor-default hover:rotate-2 hover:scale-105"><p class="text-sm tracking-wider">Trello</p></div>
+                <div class="border border-[rgba(255,255,255,0.08)] px-4 py-3 text-center hover:border-white hover:bg-white hover:text-black transition-all duration-300 cursor-default hover:rotate-2 hover:scale-105"><p class="text-sm tracking-wider">Git Version Control</p></div>
+                <div class="border border-[rgba(255,255,255,0.08)] px-4 py-3 text-center hover:border-white hover:bg-white hover:text-black transition-all duration-300 cursor-default hover:rotate-2 hover:scale-105"><p class="text-sm tracking-wider">Figma</p></div>
+                <div class="border border-[rgba(255,255,255,0.08)] px-4 py-3 text-center hover:border-white hover:bg-white hover:text-black transition-all duration-300 cursor-default hover:rotate-2 hover:scale-105"><p class="text-sm tracking-wider">Adobe Photoshop & Illustrator</p></div>
+              </div>
+            </div>
+
+            <div class="space-y-8">
+              <h3 class="text-xl tracking-wider uppercase border-b border-[rgba(255,255,255,0.08)] pb-4">Game Design Skills</h3>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="border border-[rgba(255,255,255,0.08)] px-4 py-3 text-center hover:border-white hover:bg-white hover:text-black transition-all duration-300 cursor-default hover:rotate-2 hover:scale-105"><p class="text-sm tracking-wider">Design Documentation</p></div>
+                <div class="border border-[rgba(255,255,255,0.08)] px-4 py-3 text-center hover:border-white hover:bg-white hover:text-black transition-all duration-300 cursor-default hover:rotate-2 hover:scale-105"><p class="text-sm tracking-wider">Production Management</p></div>
+                <div class="border border-[rgba(255,255,255,0.08)] px-4 py-3 text-center hover:border-white hover:bg-white hover:text-black transition-all duration-300 cursor-default hover:rotate-2 hover:scale-105"><p class="text-sm tracking-wider">Game Feature Prototyping</p></div>
+                <div class="border border-[rgba(255,255,255,0.08)] px-4 py-3 text-center hover:border-white hover:bg-white hover:text-black transition-all duration-300 cursor-default hover:rotate-2 hover:scale-105"><p class="text-sm tracking-wider">Adaptibility</p></div>
+                <div class="border border-[rgba(255,255,255,0.08)] px-4 py-3 text-center hover:border-white hover:bg-white hover:text-black transition-all duration-300 cursor-default hover:rotate-2 hover:scale-105"><p class="text-sm tracking-wider">Narrative Design</p></div>
+                <div class="border border-[rgba(255,255,255,0.08)] px-4 py-3 text-center hover:border-white hover:bg-white hover:text-black transition-all duration-300 cursor-default hover:rotate-2 hover:scale-105"><p class="text-sm tracking-wider">Quality Assurance</p></div>
+                <div class="border border-[rgba(255,255,255,0.08)] px-4 py-3 text-center hover:border-white hover:bg-white hover:text-black transition-all duration-300 cursor-default hover:rotate-2 hover:scale-105"><p class="text-sm tracking-wider">UI / UX Design</p></div>
+                <div class="border border-[rgba(255,255,255,0.08)] px-4 py-3 text-center hover:border-white hover:bg-white hover:text-black transition-all duration-300 cursor-default hover:rotate-2 hover:scale-105"><p class="text-sm tracking-wider">Budgeting & Resource Allocation</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TIMELINE -->
+      <section id="timeline" class="py-16 px-6 lg:px-12 bg-[rgba(255,255,255,0.02)]">
+        <div class="max-w-7xl mx-auto">
+          <div class="mb-16">
+            <h2 class="text-2xl tracking-wider uppercase">CAREER TIMELINE</h2>
+          </div>
+          <div class="relative">
+            <div class="hidden lg:block absolute top-8 left-0 right-0 h-0.5 bg-[rgba(255,255,255,0.08)]"></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 lg:gap-8">
+              <div class="relative">
+                <div class="hidden lg:flex absolute top-6 left-0 right-0 justify-center">
+                  <div class="w-4 h-4 rounded-full bg-white border-4 border-[rgba(15,15,15,1)] z-10"></div>
+                </div>
+                <div class="lg:pt-20 space-y-4">
+                  <p class="text-sm tracking-wider text-[rgba(255,255,255,0.6)] uppercase">June 2025 - Present</p>
+                  <h3 class="tracking-wider uppercase">Project Manager</h3>
+                  <p class="text-sm text-[rgba(255,255,255,0.7)]">ELEARNING DESIGN CENTER</p>
+                  <p class="text-sm text-justify text-[rgba(255,255,255,0.6)] leading-relaxed">Successfully deployed two end-to-end projects from conception to completion, including a full-scale VR training simulation. Led a multidisciplinary team of 3D artists, instructional designers, and video editors to produce 100+ high-quality learning and media assets. Collaborated closely with stakeholders and subject matter experts, managing regular calls to align project goals, refine requirements, and ensure smooth delivery.</p>
+                </div>
+                <div class="lg:hidden absolute left-0 top-0 bottom-0 w-0.5 bg-[rgba(255,255,255,0.08)] -ml-4"></div>
+                <div class="lg:hidden absolute left-0 top-2 w-3 h-3 rounded-full bg-white -ml-[1.125rem]"></div>
+              </div>
+
+              <div class="relative">
+                <div class="hidden lg:flex absolute top-6 left-0 right-0 justify-center">
+                  <div class="w-4 h-4 rounded-full bg-white border-4 border-[rgba(15,15,15,1)] z-10"></div>
+                </div>
+                <div class="lg:pt-20 space-y-4">
+                  <p class="text-sm tracking-wider text-[rgba(255,255,255,0.6)] uppercase">November 2024 - May 2025</p>
+                  <h3 class="tracking-wider uppercase">Instructional Designer</h3>
+                  <p class="text-sm text-[rgba(255,255,255,0.7)]">ELEARNING DESIGN CENTER</p>
+                  <p class="text-sm text-justify text-[rgba(255,255,255,0.6)] leading-relaxed">Curated 150+ learning modules across 3+ technical courses, delivering clear, engaging, and outcomes-focused learning experiences. Developed unique course templates to ensure consistent design standards and enhance learner engagement. Designed and implemented custom games and assessments tailored to each course, driving interactive, competency-based learning.</p>
+                </div>
+                <div class="lg:hidden absolute left-0 top-0 bottom-0 w-0.5 bg-[rgba(255,255,255,0.08)] -ml-4"></div>
+                <div class="lg:hidden absolute left-0 top-2 w-3 h-3 rounded-full bg-white -ml-[1.125rem]"></div>
+              </div>
+                <div class="lg:hidden absolute left-0 top-0 bottom-0 w-0.5 bg-[rgba(255,255,255,0.08)] -ml-4"></div>
+                <div class="lg:hidden absolute left-0 top-2 w-3 h-3 rounded-full bg-white -ml-[1.125rem]"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROJECT SHOWCASE -->
+      <section id="projects" class="py-16 bg-[rgba(255,255,255,0.01)] relative overflow-hidden">
+        <!-- Top Marquee -->
+        <div class="absolute top-0 left-0 right-0 overflow-hidden pointer-events-none opacity-10 py-0">
+          <div class="marquee-container whitespace-nowrap">
+            <h2 class="inline-block uppercase tracking-wider font-black text-[128px] leading-none" style="font-family:'Reenie Beanie',sans-serif;">
+              PROJECTS • PROJECTS • PROJECTS • PROJECTS • PROJECTS • PROJECTS •
+            </h2>
+          </div>
+        </div>
+
+        <div class="px-6 lg:px-12 relative z-10">
+          <div class="max-w-7xl mx-auto space-y-16">
+            <!-- Project 1 -->
+            <div class="grid lg:grid-cols-2 gap-12 items-start">
+              <a href="https://noobneel.itch.io/tic-tac-toe" class="group">
+                <div class="relative aspect-video bg-gradient-to-br from-gray-200 to-gray-300 overflow-hidden flex items-center justify-center transition-transform duration-300 group-hover:scale-105 group-hover:rotate-1">
+                  <img
+                    src="assets/TIC TAC TOE Cover Image.png"
+                    alt="TIC TAC TOE?"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+              </a>
+              <div class="space-y-5">
+                <a href="https://noobneel.itch.io/tic-tac-toe" class="block hover:opacity-60 transition-opacity">
+                  <h3 class="text-4xl tracking-wider uppercase">TIC TAC TOE?</h3>
+                </a>
+                <p class="text-sm tracking-wider text-[rgba(255,255,255,0.6)] uppercase">Game Designer | UI Artist</p>
+                <p class="text-xs tracking-wider text-[rgba(255,255,255,0.6)] uppercase" >BYOG Game Jam 2025 </p>
+                <div class="space-y-4 text-[rgba(255,255,255,0.7)] leading-relaxed">
+                  <div class="space-y-4 text-[rgba(255,255,255,0.7)] leading-relaxed"></div>
+                  <p>Tic-Tac-Toe? reimagines the classic game by merging it with multiple gameplay styles to create a fresh, puzzle-driven experience. As co–game designer and UI artist, I led the team from ideation to final submission, shaping the game’s core concept, puzzle mechanics, and overall flow. I also designed the UI to ensure clarity, responsiveness, and a clean player experience throughout the hybrid gameplay.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Project 2 -->
+            <div class="grid lg:grid-cols-2 gap-12 items-start lg:grid-flow-dense">
+              <a href="https://noobneel.itch.io/all-thing-scale" class="group lg:col-start-2">
+                <div class="relative aspect-video bg-gradient-to-br from-gray-200 to-gray-300 overflow-hidden flex items-center justify-center transition-transform duration-300 group-hover:scale-105 group-hover:rotate-1">
+                  <img
+                    src="assets/ALL Things Scale.png"
+                    alt="ALL Things Scale"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+              </a>
+              <div class="space-y-6 lg:col-start-1 lg:row-start-1">
+                <a href="https://noobneel.itch.io/all-thing-scale" class="block hover:opacity-60 transition-opacity">
+                  <h3 class="text-4xl tracking-wider uppercase">All Things Scale</h3>
+                </a>
+                <p class="text-sm tracking-wider text-[rgba(255,255,255,0.6)] uppercase">Game Designer | Level Designer | 2D Artist</p>
+                <p class="text-xs tracking-wider text-[rgba(255,255,255,0.6)] uppercase" >Game Off 2023</p>
+                <div class="space-y-4 text-[rgba(255,255,255,0.7)] leading-relaxed">
+                  <p>All Things Scale is a fast-paced collection of quirky minigames inspired by titles like WarioWare and Dumb Ways to Die. As game designer, level designer, and 2D pixel artist, I collaborated in a small team of two to craft the game’s rapid puzzle loops, visual identity, and humorous tone. I designed the minigame mechanics, curated their difficulty flow, and established the distinctive pixel-art look and feel that ties the experience together.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Project 3 -->
+            <div class="grid lg:grid-cols-2 gap-12 items-start">
+              <a href="https://noobneel.itch.io/broken" class="group">
+                <div class="relative aspect-video bg-gradient-to-br from-gray-200 to-gray-300 overflow-hidden flex items-center justify-center transition-transform duration-300 group-hover:scale-105 group-hover:rotate-1">
+                  <img
+                    src="assets/Broken.png"
+                    alt="Broken"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+              </a>
+              <div class="space-y-6">
+                <a href="https://noobneel.itch.io/broken" class="block hover:opacity-60 transition-opacity">
+                  <h3 class="text-4xl tracking-wider uppercase">Broken</h3>
+                </a>
+                <p class="text-sm tracking-wider text-[rgba(255,255,255,0.6)] uppercase">Game Designer | 2D Pixel Artist</p>
+                <p class="text-xs tracking-wider text-[rgba(255,255,255,0.6)] uppercase" >Brackeys Game Jam 2023.2</p>
+                <div class="space-y-4 text-[rgba(255,255,255,0.7)] leading-relaxed">
+                  <p>Broken is an abstract pixel-art experience exploring themes of mental health and internal struggle. Designed around symbolic storytelling and atmospheric environments, the game guides players through fragmented spaces that reflect emotional states. I led game design and created all 2D pixel art, shaping the visual language and core mechanics to reinforce the game’s message.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Marquee -->
+        <div class="absolute bottom-0 left-0 right-0 overflow-hidden pointer-events-none opacity-10 py-0">
+          <div class="marquee-container-reverse whitespace-nowrap">
+            <h2 class="inline-block uppercase tracking-wider font-black text-[128px] leading-none" style="font-family:'Reenie Beanie',sans-serif;">
+              PROJECTS • PROJECTS • PROJECTS • PROJECTS • PROJECTS • PROJECTS •
+            </h2>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section id="contact" class="py-16 px-6 lg:px-12 bg-[rgba(255,255,255,0.02)]">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <h2 class="text-8xl :text-9xl tracking-wider uppercase leading-none" style="font-family:'Reenie Beanie', sans-serif ; font-size:128px;">GET IN TOUCH</h2>
+          </div>
+
+          <div class="space-y-6">
+            <p class="text-[rgba(255,255,255,0.7)] mb-8 leading-relaxed">
+              Let's collaborate on your next project. Reach out through any of these channels.
+            </p>
+
+            <div class="space-y-4">
+
+              <!-- EMAIL -->
+              <a href="mailto:neelohit_roy@yahoo.com"
+                class="flex items-center gap-4 px-8 py-6 border border-[rgba(255,255,255,0.08)] hover:border-white hover:bg-white hover:text-black transition-all group hover:-rotate-1">
+
+                <span class="relative h-12 w-12 flex items-center justify-center">
+                  <!-- Default (White) -->
+                  <img src="assets/mail-128-w.png" alt="MAIL"
+                      class="absolute h-12 w-auto object-contain group-hover:opacity-0 transition-opacity duration-300"/>
+
+                  <!-- Hover (Black) -->
+                  <img src="assets/mail-128-b.png" alt="MAIL"
+                      class="absolute h-12 w-auto object-contain opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>
+                </span>
+                <div class="flex-1">
+                  <p class="text-xs tracking-wider uppercase text-[rgba(255,255,255,0.6)] group-hover:text-black/70">
+                    Email
+                  </p>
+                  <p>neelohit_roy0987@yahoo.com</p>
+                </div>
+              </a>
+              <!-- ITCH.IO -->
+              <a href="https://noobneel.itch.io/" target="_blank" rel="noopener noreferrer"
+                class="flex items-center gap-4 px-8 py-6 border border-[rgba(255,255,255,0.08)] hover:border-white hover:bg-white hover:text-black transition-all group hover:-rotate-1">
+                <span class="relative h-12 w-12 flex items-center justify-center">
+                  <!-- Default (White) -->
+                  <img src="assets/itchio-textless-white.svg" alt="ITCH.IO"
+                      class="absolute h-12 w-auto object-contain group-hover:opacity-0 transition-opacity duration-300"/>
+                  <!-- Hover (Black) -->
+                  <img src="assets/itchio-textless-black.svg" alt="ITCH.IO"
+                      class="absolute h-12 w-auto object-contain opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>
+                </span>
+                <div class="flex-1">
+                  <p class="text-xs tracking-wider uppercase text-[rgba(255,255,255,0.6)] group-hover:text-black/70">Itch.io</p>
+                  <p>noobneel.itch.io/</p>
+                </div>
+              </a>
+              <!-- LINKEDIN -->
+              <a href="https://www.linkedin.com/in/neelohit-roy/" target="_blank" rel="noopener noreferrer"
+                class="flex items-center gap-4 px-8 py-6 border border-[rgba(255,255,255,0.08)] hover:border-white hover:bg-white hover:text-black transition-all group hover:-rotate-2">
+                <span class="relative h-12 w-12 flex items-center justify-center">
+                  <!-- Default (White) -->
+                  <img src="assets/InBug-White.png" alt="LinkedIn"
+                      class="absolute h-12 w-auto object-contain group-hover:opacity-0 transition-opacity duration-300"/>
+                  <!-- Hover (Black) -->
+                  <img src="assets/InBug-Black.png" alt="LinkedIn"
+                      class="absolute h-12 w-auto object-contain opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>
+                </span>
+                <div class="flex-1">
+                  <p class="text-xs tracking-wider uppercase text-[rgba(255,255,255,0.6)] group-hover:text-black/70">LinkedIn</p>
+                  <p>Neelohit Roy</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-[rgba(255,255,255,0.08)] relative overflow-hidden">
+      <div class="absolute top-0 left-0 right-0 overflow-hidden pointer-events-none opacity-5">
+        <div class="marquee-container whitespace-nowrap">
+          <h2 class="inline-block uppercase font-bold text-[256px] leading-none">NEELOHIT ROY • NEELOHIT ROY • NEELOHIT ROY •</h2>
+        </div>
+      </div>
+      <div class="max-w-7xl mx-auto px-6 lg:px-12 py-12 relative z-10 text-center">
+        <p class="text-sm text-[rgba(255,255,255,0.5)]">© 2025 Neelohit Roy. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script>
+      const burger = document.getElementById("hamburger");
+      const menu = document.getElementById("mobile-menu");
+      burger.addEventListener("click", () => {
+        burger.classList.toggle("open");
+        if (menu.style.maxHeight && menu.style.maxHeight !== "0px") {
+          menu.style.maxHeight = "0px";
+        } 
+        else {
+          menu.style.maxHeight = menu.scrollHeight + "px"
+        }
+      });
+
+      function scrollAndClose(id) {
+        document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+        burger.classList.remove("open");
+        menu.style.maxHeight = "0px";
+      }
+
+      // Optional: reveal fade-in items on load (ensures CSS animation triggers on page load)
+      window.addEventListener('DOMContentLoaded', () => {
+        // nothing required: CSS animations with delays will play on load
+      });
+    </script>
+  </body>
+</html>
